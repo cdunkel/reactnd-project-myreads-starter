@@ -17,8 +17,13 @@ class SearchBooks extends React.Component {
     console.log("Search changed to " + searchTerm);
     if (searchTerm.length > 0) {
       BooksAPI.search(searchTerm).then((searchResults) => {
-        console.log(searchResults);
-        this.setState({results: searchResults});
+        if (searchResults.error) {
+          console.log("Error returned: " + searchResults.error);
+          this.setState({results: []});
+        } else {
+          console.log("Search returned " + searchResults.length + " results.");
+          this.setState({results: searchResults});
+        }
       });
     } else {
       this.setState({ results: [] });
