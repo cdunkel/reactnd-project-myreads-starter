@@ -14,7 +14,7 @@ class Book extends React.Component {
     const bookStyle = {
       width: 128,
       height: 193,
-      backgroundImage: `url(${ bookToDisplay.imageLinks && ( bookToDisplay.imageLinks.smallThumbnail || bookToDisplay.imageLinks.thumbnail ) })`
+      backgroundImage: `url(${ bookToDisplay.imageLinks && ( bookToDisplay.imageLinks.thumbnail || bookToDisplay.imageLinks.smallThumbnail ) })`
     };
 
     return (
