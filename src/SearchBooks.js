@@ -5,8 +5,8 @@ import Book from './Book';
 
 class SearchBooks extends React.Component {
 
-  // TODO - Update this to use a router rather than update state
   state = {
+    query: '',
     results: []
   };
 
@@ -14,6 +14,11 @@ class SearchBooks extends React.Component {
   // Anything that isn't in our shelf should be set to "none".
 
   onSearchChanged = (searchTerm) => {
+
+    this.setState({ query: searchTerm });
+
+    const { books } = this.props;
+
     console.log("Search changed to " + searchTerm);
     if (searchTerm.length > 0) {
       BooksAPI.search(searchTerm).then((searchResults) => {
@@ -22,7 +27,11 @@ class SearchBooks extends React.Component {
           this.setState({results: []});
         } else {
           console.log("Search returned " + searchResults.length + " results.");
-          this.setState({results: searchResults});
+          // Update the shelf parameters for the search results based on the local array of books
+          let shelvedResults = this.updateShelvesFromBooks(searchResults, books);
+
+          // Update the local state
+          this.setState({results: shelvedResults});
         }
       });
     } else {
@@ -30,9 +39,45 @@ class SearchBooks extends React.Component {
     }
   };
 
+  /**
+   * Cross-references the search results with the existing books in the local state, updating the shelf property of
+   * any search results to match that in the local state.
+   *
+   * @param searchResults An array of books that resulted from a serach.
+   * @param books The array of books in the local state.
+   * @return  An array of the same books in searchResults, but with their shelf parameters set.
+   */
+  updateShelvesFromBooks(searchResults, books) {
+    return searchResults.map(result => {
+      let existingBook = books.filter(b => {
+        return b.id === result.id;
+      })[0];
+      if (existingBook && existingBook.shelf) {
+        result.shelf = existingBook.shelf;
+      } else {
+        result.shelf = 'none';
+      }
+      return result;
+    });
+  }
+
+  onUpdateBook = (book, shelf) => {
+    // Update our local state
+    this.setState(state => ({
+      results: state.results.map((b) => {
+        if (b.id === book.id) {
+          b.shelf = shelf;
+        }
+        return b;
+      })
+    }));
+
+    // Call the passed-in update function
+    this.props.onUpdateBook(book, shelf);
+  }
+
   render() {
 
-    const { onUpdateBook } = this.props;
     let searchResults = this.state.results;
 
     return (
@@ -59,7 +104,7 @@ class SearchBooks extends React.Component {
           <ol className="books-grid">
             {searchResults.map((book) => (
               <li key={ book.id }>
-                <Book bookToDisplay={ book } onStateChanged={ onUpdateBook }/>
+                <Book bookToDisplay={ book } onStateChanged={ this.onUpdateBook }/>
               </li>
             ))}
           </ol>
