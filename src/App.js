@@ -7,13 +7,6 @@ import SearchBooks from './SearchBooks';
 
 class BooksApp extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: false,
     books: []
   };
 
@@ -28,6 +21,51 @@ class BooksApp extends React.Component {
     // Update the book on the server
     BooksAPI.update(book, shelf);
 
+    if (!shelf || shelf === 'none') {
+      this.removeBook(book);
+    } else if (!book.shelf || book.shelf === 'none') {
+      this.addBook(book, shelf);
+    } else {
+      this.changeShelf(book, shelf);
+    }
+  };
+
+  /**
+   * Updates the given book to the given shelf and adds it to the collection of books in the local state.
+   *
+   * @param book  The book to add.
+   * @param shelf The shelf to which the book should be added.
+   */
+  addBook(book, shelf) {
+    console.log("Adding book");
+    book.shelf = shelf;
+    this.setState(state => ({
+      books: state.books.concat([ book ])
+    }));
+  }
+
+  /**
+   * Removes the given book from the collection of books in the local state.
+   *
+   * @param book  The book to remove.
+   */
+  removeBook(book) {
+    console.log("Removing book");
+    this.setState(state => ({
+      books: state.books.filter((b) => {
+        return b.id !== book.id;
+      })
+    }));
+  }
+
+  /**
+   * Updates the shelf to which the given book has been set in the collection of books in the local state.
+   *
+   * @param book  The book to update.
+   * @param shelf The new shelf to which the book should be assigned.
+   */
+  changeShelf(book, shelf) {
+    console.log("Changing shelf for book");
     // Update the book in the local state
     this.setState(state => ({
       books: state.books.map((b) => {
@@ -37,9 +75,7 @@ class BooksApp extends React.Component {
         return b;
       })
     }));
-  };
-
-  // TODO - Update this to use a router
+  }
 
   render() {
     return (
