@@ -1,6 +1,10 @@
 import React from 'react';
 import Book from './Book';
 
+/**
+ * Represents a specific shelf of books with a specific title and array of books that will be displayed in a grid.
+ * Also allows the parent component to pass in a function to be called when the state of a book changes.
+ */
 class Bookshelf extends React.Component {
 
   render() {

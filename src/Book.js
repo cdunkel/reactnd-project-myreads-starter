@@ -1,8 +1,14 @@
 import React from 'react';
 
+/**
+ * Represents a single book, including thumbnail image, title, author, and a control for selecting the shelf to which
+ * the book should be assigned. The assignment itself is handled by a function passed in from a higher-order component.
+ */
 class Book extends React.Component {
 
-  // Callback for when the user selects a new shelf for a book
+  /**
+   * Callback for when the user selects a new shelf for a book
+   */
   onSelection = (selectObject) => {
     this.props.onStateChanged(this.props.bookToDisplay, selectObject.target.value);
   };
@@ -22,7 +28,7 @@ class Book extends React.Component {
         <div className="book-top">
           <div className="book-cover" style={bookStyle}/>
           <div className="book-shelf-changer">
-            <select value={ !bookToDisplay.shelf ? 'none' : bookToDisplay.shelf } onChange={ this.onSelection }>
+            <select value={ !bookToDisplay.shelf ? "none" : bookToDisplay.shelf } onChange={ this.onSelection }>
               <option value="default" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>

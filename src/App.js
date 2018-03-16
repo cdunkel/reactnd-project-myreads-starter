@@ -16,7 +16,13 @@ class BooksApp extends React.Component {
     })
   }
 
-  // Function called when updating the state of a book
+  /**
+   * Function called when updating the state of a book. This function will either add, remove, or update the book
+   * depending on the book's current and updated shelf values.
+   *
+   * @param book    The book to update.
+   * @param shelf   The new shelf to which the book should be assigned.
+   */
   updateBook = (book, shelf) => {
     // Update the book on the server
     BooksAPI.update(book, shelf);
@@ -80,10 +86,10 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        <Route exact path='/' render={() => (
+        <Route exact path="/" render={() => (
           <ListBooks books={ this.state.books } onUpdateBook={ this.updateBook }/>
         )}/>
-        <Route exact path='/search' render={() => (
+        <Route exact path="/search" render={() => (
           <SearchBooks books={ this.state.books } onUpdateBook={ this.updateBook }/>
         )}/>
       </div>

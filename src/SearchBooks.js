@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 
+/**
+ * Higher-order component for displaying a view allowing the user to search for books.
+ */
 class SearchBooks extends React.Component {
 
   state = {
@@ -10,26 +13,25 @@ class SearchBooks extends React.Component {
     results: []
   };
 
-  // TODO - Cross-reference the search results with what's already in our shelves to fill in the shelf property.
-  // Anything that isn't in our shelf should be set to "none".
-
+  /**
+   * Function called when the search term entered by the user into the search input is updated. This function handles
+   * calling the search API and managing the results of that query, if any.
+   *
+   * @param searchTerm  The search string entered by the user.
+   */
   onSearchChanged = (searchTerm) => {
 
     this.setState({ query: searchTerm });
 
     const { books } = this.props;
 
-    console.log("Search changed to " + searchTerm);
     if (searchTerm.length > 0) {
       BooksAPI.search(searchTerm).then((searchResults) => {
         if (searchResults.error) {
-          console.log("Error returned: " + searchResults.error);
           this.setState({results: []});
         } else {
-          console.log("Search returned " + searchResults.length + " results.");
           // Update the shelf parameters for the search results based on the local array of books
           let shelvedResults = this.updateShelvesFromBooks(searchResults, books);
-
           // Update the local state
           this.setState({results: shelvedResults});
         }
@@ -61,6 +63,9 @@ class SearchBooks extends React.Component {
     });
   }
 
+  /**
+   * Function called when a user updates the shelf to which a book is assigned.
+   */
   onUpdateBook = (book, shelf) => {
     // Update our local state
     this.setState(state => ({
@@ -74,11 +79,12 @@ class SearchBooks extends React.Component {
 
     // Call the passed-in update function
     this.props.onUpdateBook(book, shelf);
-  }
+  };
 
   render() {
 
-    let searchResults = this.state.results;
+    // let searchResults = this.state.results;
+    const { results } = this.state;
 
     return (
       <div className="search-books">
@@ -102,7 +108,7 @@ class SearchBooks extends React.Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {searchResults.map((book) => (
+            {results.map((book) => (
               <li key={ book.id }>
                 <Book bookToDisplay={ book } onStateChanged={ this.onUpdateBook }/>
               </li>

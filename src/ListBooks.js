@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Bookshelf from './Bookshelf';
 
+/**
+ * Parent component for the view displaying all bookshelves.
+ */
 class ListBooks extends React.Component {
   render() {
 
@@ -19,13 +22,13 @@ class ListBooks extends React.Component {
         </div>
         <div className="list-books-content">
           <div>
-            <Bookshelf shelfTitle='Currently Reading' books={ currentlyReading } onUpdateBook={ onUpdateBook }/>
-            <Bookshelf shelfTitle='Want to Read' books={ wantToRead } onUpdateBook={ onUpdateBook }/>
-            <Bookshelf shelfTitle='Read' books={ read } onUpdateBook={ onUpdateBook }/>
+            <Bookshelf shelfTitle="Currently Reading" books={ currentlyReading } onUpdateBook={ onUpdateBook }/>
+            <Bookshelf shelfTitle="Want to Read" books={ wantToRead } onUpdateBook={ onUpdateBook }/>
+            <Bookshelf shelfTitle="Read" books={ read } onUpdateBook={ onUpdateBook }/>
           </div>
         </div>
         <div className="open-search">
-          <Link to='/search'>Add a book</Link>
+          <Link to="/search">Add a book</Link>
         </div>
       </div>
     );
